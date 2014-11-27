@@ -1,0 +1,15 @@
+{
+  "name": "webapp2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "kyokutyo",
+  "devDependencies": {
+    "browser-sync": "^1.7.1",
+    "coffee-script": "^1.8.0",
+    "gulp": "^3.8.10"
+  }
+}
