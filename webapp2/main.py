@@ -16,6 +16,7 @@
 #
 import webapp2
 
+from datetime import date
 from webapp2_extras import jinja2
 
 
@@ -32,7 +33,9 @@ class BaseHandler(webapp2.RequestHandler):
 
 class MainHandler(BaseHandler):
     def get(self):
-        context = {'message': 'Hello, world!'}
+        birthday = date(2013, 12, 17)
+        time_after_birth = abs(date.today() - birthday)
+        context = {'days': str(time_after_birth.days)}
         self.render_response('index.html', **context)
 
 app = webapp2.WSGIApplication([
