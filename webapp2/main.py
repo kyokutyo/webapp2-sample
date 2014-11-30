@@ -26,7 +26,7 @@ BIRTHDAY = date(2013, 12, 17)
 
 class Day(ndb.Model):
     """Models an individual Day entry with date, photo_url."""
-    date = ndb.StringProperty(indexed=True)
+    date = ndb.DateProperty(indexed=True)
     photo_url = ndb.StringProperty(indexed=True)
 
 
@@ -44,11 +44,12 @@ class BaseHandler(webapp2.RequestHandler):
 class MainHandler(BaseHandler):
     def get(self):
         today = date.today()
-
-        day = Day()
-        day.date = today.isoformat()
-        day.photo_url = 'dododo'
-        day.put()
+        is_exists = bool(Day.query(Day.date == today).count())
+        if not is_exists:
+            day = Day()
+            day.date = today
+            day.photo_url = 'dododo'
+            day.put()
 
         time_after_birth = abs(today - BIRTHDAY)
         context = {'days': str(time_after_birth.days)}
