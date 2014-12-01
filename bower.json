@@ -1,0 +1,19 @@
+{
+  "name": "webapp2",
+  "version": "1.0.0",
+  "authors": [
+    "kyokutyo <haruta@kyokutyo.com>"
+  ],
+  "devDependencies": {
+    "react": "~0.12.1"
+  },
+  "homepage": "https://github.com/kyokutyo/webapp2-sample",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "license": "MIT"
+}
