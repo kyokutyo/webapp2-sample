@@ -27,10 +27,12 @@
             $.ajax(api_url, {
                 dataType: 'json',
                 data: params,
-                success: that.setPhotoState,
-                error: function() {
-                    console.error();
-                }
+                success: function(data) {
+                    that.setPhotoState(data);
+                }.bind(this),
+                error: function(xhr, status, err) {
+                    console.error(this.props.url, status, err.toString());
+                }.bind(this)
             });
         },
         render: function() {
