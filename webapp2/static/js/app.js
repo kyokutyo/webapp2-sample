@@ -13,12 +13,17 @@
     var App = React.createClass({
         getInitialState: function() {
             return {
+                photo_id: undefined,
                 total: undefined
             };
         },
         setPhotoState: function(data) {
+            var total = parseInt(data.photos.total, 10);
+            var photo_id = _.random(1, total);
+
             this.setState({
-                total: parseInt(data.photos.total, 10)
+                photo_id: photo_id,
+                total: total
             });
         },
         componentDidMount: function() {
@@ -36,15 +41,23 @@
             });
         },
         render: function() {
-            var link;
+            var link, photo_id;
 
+            if(typeof this.state.photo_id !== 'undefined') {
+                photo_id = (
+                    <p>PhotoID: <a href={api_url}>{this.state.photo_id}</a></p>
+                );
+            }
             if(typeof this.state.total !== 'undefined') {
                 link = (
-                    <a href={api_url}>{this.state.total}</a>
+                    <p>Total: {this.state.total}</p>
                 );
             }
             return (
-                <p>{link}</p>
+                <div>
+                    {link}
+                    {photo_id}
+                </div>
             );
         }
     });
