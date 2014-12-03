@@ -5,6 +5,7 @@
     "kyokutyo <haruta@kyokutyo.com>"
   ],
   "devDependencies": {
+    "jquery": "~2.1.1",
     "react": "~0.12.1"
   },
   "homepage": "https://github.com/kyokutyo/webapp2-sample",
