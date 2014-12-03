@@ -2,61 +2,64 @@
     'use strict';
 
     var api_url = 'https://api.flickr.com/services/rest/';
-    var params = {
-        method: 'flickr.photos.search',
-        api_key: '17570926bf4df161849251ae5cdfaa1b',
-        user_id: '112437165@N04',
-        format: 'json',
-        nojsoncallback: '1'
-    };
-
+    var api_key = '17570926bf4df161849251ae5cdfaa1b';
+    var user_id = '112437165@N04';
+    var flickr = new Flickr({ api_key: api_key });
     var App = React.createClass({
         getInitialState: function() {
             return {
-                photo_id: undefined,
+                photo: undefined,
                 total: undefined
             };
         },
         setPhotoState: function(data) {
-            var total = parseInt(data.photos.total, 10);
-            var photo_id = _.random(1, total);
+            var photos = data.photos;
+            var photo = photos.photo[0];
 
             this.setState({
-                photo_id: photo_id,
-                total: total
+                total: parseInt(photos.total, 10),
+                photo: {
+                    url: 'http://farm' + photo.farm + '.staticflickr.com/' + photo.server + '/' + photo.id + '_' + photo.secret + '.jpg',
+                    name: photo.title
+                }
             });
         },
         componentDidMount: function() {
             var that = this;
 
-            $.ajax(api_url, {
-                dataType: 'json',
-                data: params,
-                success: function(data) {
-                    that.setPhotoState(data);
-                }.bind(this),
-                error: function(xhr, status, err) {
-                    console.error(this.props.url, status, err.toString());
-                }.bind(this)
+            flickr.photos.search({
+                user_id: user_id,
+                per_page: 1
+            }, function(err, result) {
+                if(err) { throw new Error(err); }
+                var random = _.random(1, result.photos.total);
+                flickr.photos.search({
+                    user_id: user_id,
+                    per_page: 1,
+                    page: random
+                }, function(err, result) {
+                    if(err) { throw new Error(err); }
+                    that.setPhotoState(result);
+                });
             });
         },
         render: function() {
-            var link, photo_id;
+            var total, photo;
 
-            if(typeof this.state.photo_id !== 'undefined') {
-                photo_id = (
-                    <p>PhotoID: <a href={api_url}>{this.state.photo_id}</a></p>
+            if(typeof this.state.photo !== 'undefined') {
+                photo = (
+                    <p><img alt={this.state.photo.name} src={this.state.photo.url} /></p>
                 );
             }
             if(typeof this.state.total !== 'undefined') {
-                link = (
+                total = (
                     <p>Total: {this.state.total}</p>
                 );
             }
             return (
                 <div>
-                    {link}
-                    {photo_id}
+                    {total}
+                    {photo}
                 </div>
             );
         }
