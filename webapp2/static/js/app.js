@@ -19,7 +19,7 @@
             this.setState({
                 total: parseInt(photos.total, 10),
                 photo: {
-                    url: 'http://farm' + photo.farm + '.staticflickr.com/' + photo.server + '/' + photo.id + '_' + photo.secret + '.jpg',
+                    url: 'http://farm' + photo.farm + '.staticflickr.com/' + photo.server + '/' + photo.id + '_' + photo.secret + '_b.jpg',
                     name: photo.title
                 }
             });
