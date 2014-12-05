@@ -29,7 +29,7 @@
 
                 that.setState({
                     total       : parseInt(photos.total, 10),
-                    photo_number: photo_number
+                    photo_number: photo_number,
                     photo       : {
                         url       : 'http://farm' + photo.farm + '.staticflickr.com/' + photo.server + '/' + photo.id + '_' + photo.secret + '_b.jpg',
                         date_taken: date_taken.format('YYYY-MM-DD'),
