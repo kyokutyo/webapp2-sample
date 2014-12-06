@@ -1,6 +1,6 @@
 {
   "name": "webapp2",
-  "version": "1.0.0",
+  "version": "0.3.0",
   "author": "kyokutyo",
   "devDependencies": {
     "browser-sync": "^1.7.1",
