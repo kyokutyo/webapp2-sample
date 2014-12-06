@@ -68,9 +68,7 @@
                     width: '100%',
                     minHeight: '1300px'
                 };
-                photo = (
-                    <div style={style}></div>
-                );
+                photo = <div style={style}></div>;
                 days_old_that_date = this.state.days_old_today - this.state.photo.days_ago;
                 days_ago = (
                     <p>
