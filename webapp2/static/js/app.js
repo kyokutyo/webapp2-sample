@@ -58,11 +58,18 @@
             });
         },
         render: function() {
-            var total, photo, days_old_today, days_old_that_date, days_ago;
+            var total, photo, days_old_today, days_old_that_date, days_ago, style;
 
             if(typeof this.state.photo !== 'undefined') {
+                style = {
+                    backgroundImage: 'url(' + this.state.photo.url + ')',
+                    backgroundPosition: 'center center',
+                    backgroundSize: 'cover',
+                    width: '100%',
+                    minHeight: '1300px'
+                };
                 photo = (
-                    <p><img alt="" src={this.state.photo.url} /></p>
+                    <div style={style}></div>
                 );
                 days_old_that_date = this.state.days_old_today - this.state.photo.days_ago;
                 days_ago = (
