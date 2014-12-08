@@ -1,3 +1,10 @@
+/**
+ * @fileOverview View file (ReactJS)
+ *
+ * @author kyokutyo <kyokutyo@gmail.com>
+ * @version 1.0.0
+ */
+
 (function() {
     'use strict';
 
