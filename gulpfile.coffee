@@ -1,6 +1,7 @@
 gulp = require 'gulp'
 react = require 'gulp-react'
 plumber = require 'gulp-plumber'
+jest = require 'gulp-jest'
 jsdoc = require 'gulp-jsdoc'
 browserSync = require 'browser-sync'
 files = ['webapp2/main.py', 'webapp2/templates/*.html', 'webapp2/static/build/*.js']
@@ -17,13 +18,17 @@ gulp.task 'react', ->
     .pipe react()
     .pipe gulp.dest('webapp2/static/build')
 
+gulp.task 'jest', ->
+  gulp.src '__tests__'
+    .pipe jest()
+
 gulp.task 'jsdoc', ->
   gulp.src 'webapp2/static/build/*.js'
     .pipe jsdoc 'docs/js'
 
 gulp.task 'watch', ->
   gulp.watch 'webapp2/static/js/*.js', ['react']
-  gulp.watch 'webapp2/static/build/*.js', ['jsdoc']
+  gulp.watch 'webapp2/static/build/*.js', ['jsdoc', 'jest']
   gulp.watch files, browserSync.reload
 
 gulp.task 'default', ['browser-sync', 'watch']
