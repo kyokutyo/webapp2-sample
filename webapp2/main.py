@@ -16,12 +16,16 @@
 #
 import webapp2
 
-from datetime import date
+from datetime import date, timedelta
 from google.appengine.ext import ndb
 from webapp2_extras import jinja2
 
 
 BIRTHDAY = date(2013, 12, 17)
+
+
+class LastUpdate(ndb.Model):
+    update_date = ndb.DateProperty(indexed=True, auto_now=True)
 
 
 class Day(ndb.Model):
@@ -43,7 +47,17 @@ class BaseHandler(webapp2.RequestHandler):
 
 class MainHandler(BaseHandler):
     def get(self):
+        update_date = LastUpdate()
+        update_date.put()
+
         today = date.today()
+        edge = update_date.update_date + timedelta(days=5)
+
+        if (today > edge):
+            should_update = True
+        else:
+            should_update = False
+
         is_exists = bool(Day.query(Day.date == today).count())
         if not is_exists:
             day = Day()
@@ -52,7 +66,11 @@ class MainHandler(BaseHandler):
             day.put()
 
         time_after_birth = abs(today - BIRTHDAY)
-        context = {'days': str(time_after_birth.days)}
+        context = {
+            'days': str(time_after_birth.days),
+            'should_update': should_update,
+            'last_update': str(update_date.update_date),
+        }
         self.render_response('index.html', **context)
 
 app = webapp2.WSGIApplication([
