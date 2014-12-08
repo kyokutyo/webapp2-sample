@@ -10,7 +10,7 @@
 
     var flickr   = new Flickr({ api_key: '17570926bf4df161849251ae5cdfaa1b' });
     var user_id  = '112437165@N04';
-    var birthday = '2013-12-17'
+    var birthday = '2013-12-17';
 
     var App = React.createClass({
         getInitialState: function() {
