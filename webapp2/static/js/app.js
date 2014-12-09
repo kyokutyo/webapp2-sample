@@ -33,7 +33,6 @@
                 if(err) { throw new Error(err); }
                 date_taken = moment(result.photo.dates.taken, 'YYYY-MM-DD');
                 days_ago = moment().diff(date_taken, 'day');
-
                 that.setState({
                     total       : parseInt(photos.total, 10),
                     photo_number: photo_number,
@@ -43,6 +42,14 @@
                         days_ago  : days_ago
                     }
                 });
+            });
+
+            flickr.photos.getSizes({
+                photo_id: photo.id
+            }, function(err, result) {
+                if(err) { throw new Error(err); }
+                console.log(result.sizes.size[8].height);
+                console.log(result.sizes.size[8].width);
             });
         },
         componentDidMount: function() {
