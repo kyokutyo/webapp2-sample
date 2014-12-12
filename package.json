@@ -8,6 +8,7 @@
     "gulp": "^3.8.10",
     "gulp-jest": "^0.2.2",
     "gulp-jsdoc": "^0.1.4",
+    "gulp-less": "^2.0.1",
     "gulp-plumber": "^0.6.6",
     "gulp-react": "^2.0.0",
     "jest-cli": "^0.2.0"
