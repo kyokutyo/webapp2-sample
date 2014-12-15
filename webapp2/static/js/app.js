@@ -14,12 +14,12 @@
 
     var Infos = React.createClass({
         render: function() {
-            var days_old_that_date, days_ago, total, days_old_today;
+            var days_old_that_date, days_ago;
 
             days_old_that_date = this.props.days_old_today - this.props.days_ago;
             if(days_old_that_date) {
                 days_ago = (
-                    <div className="infos__days-old">
+                    <div className="infos__days-ago">
                     <p>
                     <span className="date">{this.props.days_ago}</span> day(s) ago ({days_old_that_date} days old)
                     </p>
@@ -27,28 +27,40 @@
                 );
             }
 
+            return (
+                <div className="infos">
+                    {days_ago}
+                </div>
+
+            );
+        }
+    });
+
+    var Today = React.createClass({
+        render: function() {
+            var total, days_old_today;
+
             if(typeof this.props.total !== 'undefined') {
                 total = (
-                    <div className="infos__total">
+                    <div className="today__total">
                     <p>Total: {this.props.total} photos</p>
                     </div>
                 );
             }
             if(typeof this.props.days_old_today !== 'undefined') {
                 days_old_today = (
-                    <div className="infos__days-old-today">
+                    <div className="today__days-old">
                     <p>
-                    Today, Rintaro is <span className="infos__days-old-today__date">{this.props.days_old_today}</span> days old.
+                    Today, Rintaro is <span className="today__days-old__date">{this.props.days_old_today}</span> days old.
                     </p>
                     </div>
                 );
             }
 
             return (
-                <div className="infos">
+                <div className="today">
                     {total}
                     {days_old_today}
-                    {days_ago}
                 </div>
 
             );
@@ -115,19 +127,20 @@
             });
         },
         render: function() {
-            var total, photo, days_old_today, days_old_that_date;
+            var photo;
 
             if(typeof this.state.photo_url !== 'undefined') {
                 photo = (
                     <div className="photo">
-                        <img src={this.state.photo_url} alt="" />
+                        <img className="photo__item" src={this.state.photo_url} alt="" />
                     </div>
                 );
             }
             return (
                 <div>
-                    <Infos days_old_today={this.state.days_old_today} total={this.state.total} days_ago={this.state.photo_days_ago} />
                     {photo}
+                    <Infos total={this.state.total} days_old_today={this.state.days_old_today} days_ago={this.state.photo_days_ago} />
+                    <Today total={this.state.total} days_old_today={this.state.days_old_today} />
                 </div>
             );
         }
