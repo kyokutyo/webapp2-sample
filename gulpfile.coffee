@@ -1,6 +1,7 @@
 gulp = require 'gulp'
 react = require 'gulp-react'
 less = require 'gulp-less'
+styledocco = require 'gulp-styledocco'
 plumber = require 'gulp-plumber'
 jest = require 'gulp-jest'
 jsdoc = require 'gulp-jsdoc'
@@ -32,13 +33,22 @@ gulp.task 'jsdoc', ->
     .pipe jsdoc 'docs/js'
 
 gulp.task 'less', ->
-  gulp.src 'webapp2/static/less/*.less'
+  gulp.src files.less
     .pipe plumber()
     .pipe less()
     .pipe gulp.dest('webapp2/static/css')
 
+gulp.task 'styledocco', ->
+  gulp.src files.less
+    .pipe plumber()
+    .pipe styledocco(
+      out: 'docs/css'
+      name: '"Style Guide"'
+      preprocessor: '"lessc"'
+    )
+
 gulp.task 'watch', ->
-  gulp.watch files.less, ['less']
+  gulp.watch files.less, ['less', 'styledocco']
   gulp.watch 'webapp2/static/js/*.js', ['react']
   gulp.watch 'webapp2/static/build/*.js', ['jsdoc', 'jest']
   gulp.watch [files.python, files.html, files.js, files.less], browserSync.reload
