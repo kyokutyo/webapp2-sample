@@ -1,34 +1,34 @@
 /*
-# body 背景
+# 全体背景
 
 ```
-<body>(コンテンツ)</body>
+<body class="rntr">(コンテンツ)</body>
 ```
 */
 
-body {
+.rntr {
   background: #95acf2;
 }
 
 /*
-# メインボタン
+# メイン画像
 
-基本的なボタン
+画像周辺のスタイル
 
 ```
-<div class="btn">
-    <a class="btn__link">ダウンロードする</a>
+<div class="photo">
+    <img class="photo__item" alt="" src="//placekitten.com/g/125/125/" />
 </div>
 ```
 */
 
-.btn {
-  background: yellow;
-  height: 30px;
-  width: 200px;
-  &__link {
-    color: white;
+.photo {
+  padding: 5px;
+  text-align: center;
+  &__item {
+    box-shadow: 0 1px 5px rgba(0, 0, 0, .4);
     display: block;
-    text-align: center;
+    margin: auto;
+    max-width: 100%;
   }
 }
