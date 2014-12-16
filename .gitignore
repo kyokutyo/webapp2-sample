@@ -2,3 +2,6 @@
 node_modules
 bower_components
 webapp2/static/build/*.js
+docs/js
+webapp2/static/css
+docs/css

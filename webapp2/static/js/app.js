@@ -1,17 +1,73 @@
+/**
+ * @fileOverview View file (ReactJS)
+ *
+ * @author kyokutyo <kyokutyo@gmail.com>
+ * @version 1.0.0
+ */
+
 (function() {
     'use strict';
 
     var flickr   = new Flickr({ api_key: '17570926bf4df161849251ae5cdfaa1b' });
     var user_id  = '112437165@N04';
-    var birthday = '2013-12-17'
+    var birthday = '2013-12-17';
+
+    var Info = React.createClass({
+        render: function() {
+            var days_old_that_date, days_ago;
+
+            days_old_that_date = this.props.days_old_today - this.props.days_ago;
+            if(days_old_that_date) {
+                days_ago = (
+                    <div className="info__days-ago">
+                        <span className="info__days-ago__date">{this.props.days_ago}</span> day(s) ago, <span className="info__days-ago__date">{days_old_that_date}</span> days old.
+                    </div>
+                );
+            }
+            return (
+                <div className="info">
+                    {days_ago}
+                </div>
+            );
+        }
+    });
+
+    var Today = React.createClass({
+        render: function() {
+            var total, days_old_today;
+
+            if(typeof this.props.total !== 'undefined') {
+                total = (
+                    <div className="today__total">
+                    <p>Total: {this.props.total} photos</p>
+                    </div>
+                );
+            }
+            if(typeof this.props.days_old_today !== 'undefined') {
+                days_old_today = (
+                    <div className="today__days-old">
+                    Today, Rintaro is <span className="today__days-old__date">{this.props.days_old_today}</span> days old.
+                    </div>
+                );
+            }
+            return (
+                <div className="today">
+                    {days_old_today}
+                    {total}
+                </div>
+            );
+        }
+    });
 
     var App = React.createClass({
         getInitialState: function() {
             return {
-                days_old_today: moment().diff(moment(birthday), 'day'),
-                total         : undefined,
-                photo_number  : undefined,
-                photo         : undefined
+                days_old_today  : moment().diff(moment(birthday), 'day'),
+                total           : undefined,
+                photo_number    : undefined,
+                photo_url       : undefined,
+                photo_date_taken: undefined,
+                photo_days_ago  : undefined
             };
         },
         setPhotoState: function(data, photo_number) {
@@ -26,17 +82,22 @@
                 if(err) { throw new Error(err); }
                 date_taken = moment(result.photo.dates.taken, 'YYYY-MM-DD');
                 days_ago = moment().diff(date_taken, 'day');
-
                 that.setState({
-                    total       : parseInt(photos.total, 10),
-                    photo_number: photo_number,
-                    photo       : {
-                        url       : 'http://farm' + photo.farm + '.staticflickr.com/' + photo.server + '/' + photo.id + '_' + photo.secret + '_b.jpg',
-                        date_taken: date_taken.format('YYYY-MM-DD'),
-                        days_ago  : days_ago
-                    }
+                    total           : parseInt(photos.total, 10),
+                    photo_number    : photo_number,
+                    photo_url       : 'http://farm' + photo.farm + '.staticflickr.com/' + photo.server + '/' + photo.id + '_' + photo.secret + '_b.jpg',
+                    photo_date_taken: date_taken.format('YYYY-MM-DD'),
+                    photo_days_ago  : days_ago
                 });
             });
+
+            // flickr.photos.getSizes({
+            //     photo_id: photo.id
+            // }, function(err, result) {
+            //     if(err) { throw new Error(err); }
+            //     console.log(result.sizes.size[8].height);
+            //     console.log(result.sizes.size[8].width);
+            // });
         },
         componentDidMount: function() {
             var that = this;
@@ -58,42 +119,20 @@
             });
         },
         render: function() {
-            var total, photo, days_old_today, days_old_that_date, days_ago, style;
+            var photo;
 
-            if(typeof this.state.photo !== 'undefined') {
-                style = {
-                    backgroundImage: 'url(' + this.state.photo.url + ')',
-                    backgroundPosition: 'center center',
-                    backgroundSize: 'cover',
-                    width: '100%',
-                    minHeight: '1300px'
-                };
-                photo = <div style={style}></div>;
-                days_old_that_date = this.state.days_old_today - this.state.photo.days_ago;
-                days_ago = (
-                    <p>
-                    <span className="date">{this.state.photo.days_ago}</span> day(s) ago ({days_old_that_date} days old)
-                    </p>
-                );
-            }
-            if(typeof this.state.total !== 'undefined') {
-                total = (
-                    <p>Total: {this.state.total} photos</p>
-                );
-            }
-            if(typeof this.state.days_old_today !== '') {
-                days_old_today = (
-                    <div className="days-old-today">
-                        Today, Rintaro is <span className="days-old-today__date">{this.state.days_old_today}</span> days old.
+            if(typeof this.state.photo_url !== 'undefined') {
+                photo = (
+                    <div className="photo">
+                        <img className="photo__item" src={this.state.photo_url} alt="" />
                     </div>
                 );
             }
             return (
                 <div>
-                    {days_old_today}
-                    {total}
-                    {days_ago}
                     {photo}
+                    <Info total={this.state.total} days_old_today={this.state.days_old_today} days_ago={this.state.photo_days_ago} />
+                    <Today total={this.state.total} days_old_today={this.state.days_old_today} />
                 </div>
             );
         }
