@@ -12,26 +12,22 @@
     var user_id  = '112437165@N04';
     var birthday = '2013-12-17';
 
-    var Infos = React.createClass({
+    var Info = React.createClass({
         render: function() {
             var days_old_that_date, days_ago;
 
             days_old_that_date = this.props.days_old_today - this.props.days_ago;
             if(days_old_that_date) {
                 days_ago = (
-                    <div className="infos__days-ago">
-                    <p>
-                    <span className="date">{this.props.days_ago}</span> day(s) ago ({days_old_that_date} days old)
-                    </p>
+                    <div className="info__days-ago">
+                        <span className="info__days-ago__date">{this.props.days_ago}</span> day(s) ago, <span className="info__days-ago__date">{days_old_that_date}</span> days old.
                     </div>
                 );
             }
-
             return (
-                <div className="infos">
+                <div className="info">
                     {days_ago}
                 </div>
-
             );
         }
     });
@@ -50,19 +46,15 @@
             if(typeof this.props.days_old_today !== 'undefined') {
                 days_old_today = (
                     <div className="today__days-old">
-                    <p>
                     Today, Rintaro is <span className="today__days-old__date">{this.props.days_old_today}</span> days old.
-                    </p>
                     </div>
                 );
             }
-
             return (
                 <div className="today">
-                    {total}
                     {days_old_today}
+                    {total}
                 </div>
-
             );
         }
     });
@@ -139,7 +131,7 @@
             return (
                 <div>
                     {photo}
-                    <Infos total={this.state.total} days_old_today={this.state.days_old_today} days_ago={this.state.photo_days_ago} />
+                    <Info total={this.state.total} days_old_today={this.state.days_old_today} days_ago={this.state.photo_days_ago} />
                     <Today total={this.state.total} days_old_today={this.state.days_old_today} />
                 </div>
             );
