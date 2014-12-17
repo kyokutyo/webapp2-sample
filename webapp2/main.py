@@ -14,13 +14,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+
+import dateutil.tz
 import webapp2
 
-from datetime import date
+from datetime import date, datetime
 from google.appengine.ext import ndb
 from webapp2_extras import jinja2
 
-
+jst = dateutil.tz.gettz('Asia/Tokyo')
 BIRTHDAY = date(2013, 12, 17)
 
 
@@ -43,6 +45,8 @@ class BaseHandler(webapp2.RequestHandler):
 
 class MainHandler(BaseHandler):
     def get(self):
+        now = datetime.now(jst)
+        print now
         today = date.today()
         is_exists = bool(Day.query(Day.date == today).count())
         if not is_exists:
