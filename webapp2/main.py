@@ -14,23 +14,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+
+import dateutil.tz
 import webapp2
 
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 from google.appengine.ext import ndb
 from webapp2_extras import jinja2
 
-
-BIRTHDAY = date(2013, 12, 17)
+jst = dateutil.tz.gettz('Asia/Tokyo')
 
 
 class LastUpdate(ndb.Model):
-    update_date = ndb.DateProperty(indexed=True, auto_now=True)
+    update_date = ndb.DateTimeProperty(indexed=True, auto_now=True)
 
 
 class Day(ndb.Model):
     """Models an individual Day entry with date, photo_url."""
-    date = ndb.DateProperty(indexed=True)
+    date = ndb.DateTimeProperty(indexed=True)
     photo_url = ndb.StringProperty(indexed=True)
 
 
@@ -47,31 +48,30 @@ class BaseHandler(webapp2.RequestHandler):
 
 class MainHandler(BaseHandler):
     def get(self):
-        update_date = LastUpdate()
-        update_date.put()
-
         today = date.today()
-        edge = update_date.update_date + timedelta(days=5)
 
-        if (today > edge):
-            should_update = True
-        else:
-            should_update = False
+        if (self._should_update()):
+            update_date = LastUpdate()
+            update_date.put()
 
         is_exists = bool(Day.query(Day.date == today).count())
         if not is_exists:
             day = Day()
-            day.date = today
+            day.date = datetime.now(jst)
             day.photo_url = 'dododo'
             day.put()
 
-        time_after_birth = abs(today - BIRTHDAY)
         context = {
-            'days': str(time_after_birth.days),
-            'should_update': should_update,
-            'last_update': str(update_date.update_date),
+            'last_update': str('update_date.update_date'),
         }
         self.render_response('index.html', **context)
+
+    def _should_update(self):
+        now = datetime.now(jst)
+        today = date.today()
+        update_date = LastUpdate.query().order(-LastUpdate.update_date).get()
+        edge = update_date.update_date + timedelta(days=5)
+        return now > edge
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler)

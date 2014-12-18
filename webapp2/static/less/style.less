@@ -1,0 +1,105 @@
+/* 変数 */
+
+@shadow: 0 1px 3px rgba(0, 0, 0, .35);
+
+/*
+# 全体背景
+
+```
+<body class="rntr">(コンテンツ)</body>
+```
+*/
+
+.rntr {
+  background: #368abf;
+}
+
+/*
+# メイン画像
+
+画像周辺のスタイル
+
+```
+<div class="photo">
+    <img class="photo__item" alt="" src="//placekitten.com/g/125/125/" />
+</div>
+```
+*/
+
+.photo {
+  padding: 5px;
+  text-align: center;
+  &__item {
+    box-shadow: @shadow;
+    display: block;
+    margin: auto;
+    max-width: 100%;
+  }
+}
+
+/*
+# インフォメーション
+
+画像の情報
+
+```
+<div class="info">
+    <div className="info__days-ago">
+        <span class="info__days-ago__date">321</span> day(s) ago,
+        <span class="info__days-ago__date">456</span> days old.
+    </div>
+</div>
+```
+*/
+
+.info {
+  background: #63caf2;
+  box-shadow: @shadow;
+  color: #323159;
+  margin: 0 5px;
+  padding: 7px;
+  text-align: center;
+  &__days-ago {
+    &__date {
+      font-size: 1.3rem;
+      font-weight: bold;
+    }
+  }
+}
+
+/*
+
+今日の情報
+
+```
+<div class="today">
+    <div class="today__days-old">
+    Today, Rintaro is <span class="today__days-old__date">567</span> days old.
+    </div>
+</div>
+```
+*/
+
+.today {
+  text-align: center;
+  &__days-old {
+    background: average(#63caf2, #fff);
+    box-shadow: @shadow;
+    color: #323159;
+    font-size: .9rem;
+    margin: 5px;
+    padding: 7px;
+    &__date {
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+  }
+  &__total {
+    background: #fff;
+    box-shadow: @shadow;
+    color: #323159;
+    font-size: .9rem;
+    margin: 5px;
+    padding: 7px;
+  }
+}
