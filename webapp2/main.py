@@ -18,12 +18,15 @@
 import dateutil.tz
 import webapp2
 
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from google.appengine.ext import ndb
 from webapp2_extras import jinja2
 
 jst = dateutil.tz.gettz('Asia/Tokyo')
-BIRTHDAY = date(2013, 12, 17)
+
+
+class LastUpdate(ndb.Model):
+    update_date = ndb.DateTimeProperty(indexed=True, auto_now=True)
 
 
 class Day(ndb.Model):
@@ -45,19 +48,30 @@ class BaseHandler(webapp2.RequestHandler):
 
 class MainHandler(BaseHandler):
     def get(self):
-        now = datetime.now(jst)
-        print now
-        today = date.today()
-        is_exists = bool(Day.query(Day.date == today).count())
-        if not is_exists:
-            day = Day()
-            day.date = today
-            day.photo_url = 'dododo'
-            day.put()
+        if (self._should_update()):
+            update_date = LastUpdate()
+            update_date.put()
 
-        time_after_birth = abs(today - BIRTHDAY)
-        context = {'days': str(time_after_birth.days)}
+        # is_exists = bool(Day.query(Day.date == today).count())
+        # if not is_exists:
+        #     day = Day()
+        #     day.date = datetime.now(jst)
+        #     day.photo_url = 'dododo'
+        #     day.put()
+
+        context = {
+            'last_update': str('update_date.update_date'),
+        }
         self.render_response('index.html', **context)
+
+    def _should_update(self):
+        now = datetime.now()
+        update_date = LastUpdate.query().order(-LastUpdate.update_date).get()
+        if not update_date:
+            return True
+        if (now > update_date.update_date + timedelta(days=5)):
+            return True
+        return False
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler)
