@@ -31,7 +31,7 @@ class LastUpdate(ndb.Model):
 
 class Day(ndb.Model):
     """Models an individual Day entry with date, photo_url."""
-    date = ndb.DateTimeProperty(indexed=True)
+    date = ndb.DateProperty(indexed=True)
     photo_url = ndb.StringProperty(indexed=True)
 
 
@@ -48,18 +48,16 @@ class BaseHandler(webapp2.RequestHandler):
 
 class MainHandler(BaseHandler):
     def get(self):
-        today = date.today()
-
         if (self._should_update()):
             update_date = LastUpdate()
             update_date.put()
 
-        is_exists = bool(Day.query(Day.date == today).count())
-        if not is_exists:
-            day = Day()
-            day.date = datetime.now(jst)
-            day.photo_url = 'dododo'
-            day.put()
+        # is_exists = bool(Day.query(Day.date == today).count())
+        # if not is_exists:
+        #     day = Day()
+        #     day.date = datetime.now(jst)
+        #     day.photo_url = 'dododo'
+        #     day.put()
 
         context = {
             'last_update': str('update_date.update_date'),
@@ -67,11 +65,13 @@ class MainHandler(BaseHandler):
         self.render_response('index.html', **context)
 
     def _should_update(self):
-        now = datetime.now(jst)
-        today = date.today()
+        now = datetime.now()
         update_date = LastUpdate.query().order(-LastUpdate.update_date).get()
-        edge = update_date.update_date + timedelta(days=5)
-        return now > edge
+        if not update_date:
+            return True
+        if (now > update_date.update_date + timedelta(days=5)):
+            return True
+        return False
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler)
